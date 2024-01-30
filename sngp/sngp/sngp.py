@@ -6,6 +6,7 @@ import torch.nn as nn
 from torch.optim import Adam
 from torch.utils.data import TensorDataset, DataLoader
 from torch.nn.parameter import Parameter
+from torch.nn.utils import spectral_norm
 
 from ..core import Logger
 from ..entities import SNGPInfo
