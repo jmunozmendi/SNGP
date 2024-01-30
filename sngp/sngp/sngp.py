@@ -36,6 +36,9 @@ class SNGP(nn.Module):
         nn.init.normal_(random_fourier_feature_layer.weight, mean=0.0, std=1.0)
         nn.init.uniform_(random_fourier_feature_layer.bias, a=0.0, b=2 * np.pi)
 
+        # Apply spectral normalization
+        random_fourier_feature_layer = spectral_norm(random_fourier_feature_layer)        
+
         self.rff = nn.Sequential(backbone, random_fourier_feature_layer)
 
         # RFF approximation reduces the GP to a standard Bayesian linear model,
