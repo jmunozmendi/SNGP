@@ -20,7 +20,7 @@ class SNGP(nn.Module):
             backbone_output_features: int = 768,
             num_inducing: int = 1024,
             momentum: float = 0,
-            ridge_penalty: float = 0
+            ridge_penalty: float = 1e-6
     ):
         
         super().__init__()
@@ -126,6 +126,10 @@ class SNGP(nn.Module):
             for j, (x_batch, y_batch) in enumerate(data_loader):
                 
                 optimizer.zero_grad()
+
+                if torch.cuda.is_available():
+                    x_batch = tuple(x.cuda() for x in x_batch)
+                    y_batch = y_batch.cuda()
                 
                 if i == (epochs - 1):
 
@@ -150,8 +154,6 @@ class SNGP(nn.Module):
 
                 optimizer.step()
                 
-                Logger.info(f'Minibatch in progress... {int(((j+1)/len(data_loader))*100)}%', flush=True)
-
 
             Logger.info(f'Training in progress... {int(((i+1)/epochs)*100)}%', flush=True)
             
@@ -171,10 +173,12 @@ class SNGP(nn.Module):
         with torch.no_grad():
             
             for j, (x_batch, y_batch) in enumerate(data_loader):
-            
+
+                if torch.cuda.is_available():
+                    x_batch = tuple(x.cuda() for x in x_batch)
+                    y_batch = y_batch.cuda()
+                                
                 preds, variances = self(x_batch, with_variance=True, update_precision=False)
-                
-                print(variances)
 
                 logits = self.mean_field_logits(preds, variances)
    
@@ -237,6 +241,7 @@ class SNGP(nn.Module):
                 print('Cholesky')
             except:
                 self.covariance = Parameter(self.ridge_penalty * self.precision.cholesky_inverse(), requires_grad=False)
+                print("Covariance: ", self.covariance)
                 self.is_fit = torch.tensor(True)
                 print('Standard inversion')
         else:
@@ -253,5 +258,5 @@ class SNGP(nn.Module):
         
         if len(logits.shape) > 1:
             logits_scale = logits_scale[:, None]
-            
+
         return logits/logits_scale
