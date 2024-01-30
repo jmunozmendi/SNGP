@@ -121,6 +121,8 @@ class SNGP(nn.Module):
         # Training batch
         data_loader: DataLoader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
+        losses = []
+
         for i in range(epochs):
             
             for j, (x_batch, y_batch) in enumerate(data_loader):
@@ -147,6 +149,7 @@ class SNGP(nn.Module):
                 
                 # − log p(β|D) = − log p(D|β) + 0.5*||β||2
                 neg_log_posterior: Tensor = neg_log_likelihood + l2_loss
+                losses.append(neg_log_posterior.item())
                 
                 optimizer.zero_grad()
                 
@@ -155,7 +158,7 @@ class SNGP(nn.Module):
                 optimizer.step()
                 
 
-            Logger.info(f'Training in progress... {int(((i+1)/epochs)*100)}%', flush=True)
+            Logger.info(f'Training in progress... {int(((i+1)/epochs)*100)}%  Mean Loss...{np.mean(losses)}', flush=True)
             
         self.update_covariance()
         
@@ -241,7 +244,6 @@ class SNGP(nn.Module):
                 print('Cholesky')
             except:
                 self.covariance = Parameter(self.ridge_penalty * self.precision.cholesky_inverse(), requires_grad=False)
-                print("Covariance: ", self.covariance)
                 self.is_fit = torch.tensor(True)
                 print('Standard inversion')
         else:
