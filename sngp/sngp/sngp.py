@@ -162,7 +162,7 @@ class SNGP(nn.Module):
                 optimizer.step()
                 
 
-            Logger.info(f'Training in progress... {int(((i+1)/epochs)*100)}%  Mean Loss...{np.mean(losses)}', flush=True)
+            print('Training in progress... ', int(((i+1)/epochs)*100), '%  Mean Loss... ', np.mean(losses))
             
         self.update_covariance()
         
@@ -194,7 +194,7 @@ class SNGP(nn.Module):
                 probs_list.append(probs)
                 variance_list.append(variances.detach().cpu().numpy())
                 
-                Logger.info(f'Inference in progress... {int(((j+1)/len(data_loader))*100)}%', flush=True)
+                print('Inference in progress... ', int(((j+1)/len(data_loader))*100), '%')
                        
         mean = np.concatenate(probs_list)  # type: ignore      
         decision = np.argmax(mean, axis = 1)
