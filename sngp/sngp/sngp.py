@@ -53,9 +53,6 @@ class SNGP(nn.Module):
         self.register_buffer('is_fit', torch.tensor(False))
         self.is_fit = torch.tensor(False)
 
-        self.register_buffer('dataset_passed', torch.tensor(False))
-        self.dataset_passed = torch.tensor(False)
-
         self.register_buffer('max_variance', torch.ones(1))
 
         self.covariance = Parameter(
@@ -94,10 +91,6 @@ class SNGP(nn.Module):
                 )
             with torch.no_grad():
                 variances = torch.bmm(features[:, None, :], (features @ self.covariance)[:, :, None], ).reshape(-1)
-                if not self.dataset_passed:
-                    self.max_variance = torch.max(variances).unsqueeze(dim=0)
-                    self.dataset_passed = torch.tensor(True)
-                variances = variances / self.max_variance
 
             return logits, variances           
             
