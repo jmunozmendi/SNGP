@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: SNGP
+Version: 0.1
+Summary: Spectral-normalized Neural Gaussian processes in PyTorch.
+Author: Javier Muñoz Mendi
+Author-email: jmunozmendi@gmail.com
+License: MIT
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: torch
+
+# SNGP
+
+Implementation of Spectral-normalized Neural Gaussian Process (SNGP) in PyTorch.
