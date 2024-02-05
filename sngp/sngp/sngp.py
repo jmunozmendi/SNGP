@@ -8,7 +8,6 @@ from torch.utils.data import TensorDataset, DataLoader
 from torch.nn.parameter import Parameter
 from torch.nn.utils import spectral_norm
 
-from ..core import Logger
 from ..entities import SNGPInfo
 from typing import Tuple
 
