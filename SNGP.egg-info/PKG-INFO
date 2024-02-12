@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: SNGP
-Version: 0.2
+Version: 0.3
 Summary: Spectral-normalized Neural Gaussian processes in PyTorch.
 Author: Javier Muñoz Mendi
 Author-email: jmunozmendi@gmail.com

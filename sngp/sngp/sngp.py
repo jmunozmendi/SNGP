@@ -66,9 +66,6 @@ class SNGP(nn.Module):
             self.precision_initial,
             requires_grad=False,
         )
-        
-        if torch.cuda.is_available():
-            self = self.cuda()
             
 
             
