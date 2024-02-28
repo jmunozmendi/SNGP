@@ -234,13 +234,13 @@ class SNGP(nn.Module):
                 L = torch.linalg.cholesky(self.precision)
                 self.covariance = Parameter(self.ridge_penalty * L.cholesky_inverse(), requires_grad=False)
                 epsilon = 1e-5  # Small constant; adjust based on your specific needs
-                self.covariance = self.covariance + epsilon * torch.eye(self.covariance.size(0), requires_grad=False)
+                self.covariance = self.covariance + epsilon * torch.eye(self.covariance.size(0), device=self.covariance.device, requires_grad=False)
                 self.is_fit = torch.tensor(True)
                 print('Cholesky')
             except:
                 self.covariance = Parameter(self.ridge_penalty * self.precision.cholesky_inverse(), requires_grad=False)
                 epsilon = 1e-5  # Small constant; adjust based on your specific needs
-                self.covariance = self.covariance + epsilon * torch.eye(self.covariance.size(0), requires_grad=False)                
+                self.covariance = self.covariance + epsilon * torch.eye(self.covariance.size(0), device=self.covariance.device, requires_grad=False)                
                 self.is_fit = torch.tensor(True)
                 print('Standard inversion')
         else:
